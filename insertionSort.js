@@ -1,22 +1,31 @@
-function insertion_Sort(arr) {
-  for (var i = 1; i < arr.length; i++) {
-    if (arr[i] < arr[0]) {
-      //move current element to the first position
-      arr.unshift(arr.splice(i, 1)[0]);
-    } else if (arr[i] > arr[i - 1]) {
-      //leave current element where it is
-      continue;
-    } else {
-      //find where element should go
-      for (var j = 1; j < i; j++) {
-        if (arr[i] > arr[j - 1] && arr[i] < arr[j]) {
-          //move element
-          arr.splice(j, 0, arr.splice(i, 1)[0]);
-        }
-      }
+var insertionSort = function(array, comparator) {
+  comparator = comparator || defaultComparator;
+
+  // start at index 1 as sublist of array[0] is already sorted
+  for (var index = 1; index < array.length; index++) {
+    var value = array[index];
+    var compareIndex = index - 1;
+    // swap with left element while < value
+    while (compareIndex > -1 && comparator(array[compareIndex], value) > 0) {
+      array = swap(array, compareIndex, index);
+      index = compareIndex;
+      compareIndex--;
     }
   }
-  return arr;
+  return array;
+};
+
+function defaultComparator(a, b) {
+  if (a < b) return -1;
+  else if (a > b)
+    // a comes first
+    return 1; // b comes first
+  return 0;
 }
 
-console.log(insertion_Sort([3, 0, 2, 5, -1, 4, 1]));
+function swap(arr, i1, i2) {
+  var temp = arr[i1];
+  arr[i1] = arr[i2];
+  arr[i2] = temp;
+  return arr;
+}
